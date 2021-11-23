@@ -1,0 +1,27 @@
+version: '3.4'
+
+# template for common definition
+x-template: &template
+  build:
+    context: .
+    args:
+          GITHUB_USER: $GITHUB_USER
+          GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN
+  volumes:
+    - ./config:/opt/embulk/config:cached
+    - ~/.gcp:/root/.gcp:cached
+
+services:
+  embulk:
+    container_name: embulk
+    environment:
+      SPREADSHEETS_TABLE: $SPREADSHEETS_TABLE
+      BIGQUERY_PROJECT: teamaya-8131
+      BIGQUERY_PURCHASE_AMOUNT_DATASET: purchase_amount_source_spreadsheets
+      GCP_SERVICE_JSON: $GCP_SERVICE_JSON
+    <<: *template
+
+networks:
+  default:
+    external:
+      name: teamaya
