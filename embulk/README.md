@@ -23,12 +23,12 @@ docker exec embulk sh /embulk/bin/embulk run -b bundle config/spreadsheet/export
 ```
 
 ### Results
-- You can confirm that a new table has been created in the dataset specified (=`purchase_amount_source_spreadsheets`) in the BigQuery `teamaya-8131` project.
+- You can confirm that a new table has been created in the dataset specified (=`purchase_amount_source_spreadsheets`) in BigQuery `teamaya-8131` project.
 
 ## Notes.
 - The project and dataset must have been created in GCP beforehand.
-    - project: teamaya-8131
-    - dataset: purchase_amount_source_spreadsheets
+    - project: `teamaya-8131`
+    - dataset: `purchase_amount_source_spreadsheets`
 - You need to set the environment variables.
     - SPREADSHEETS_TABLE: Spreadsheets file URL
         - `export SPREADSHEETS_TABLE=<URL>`
