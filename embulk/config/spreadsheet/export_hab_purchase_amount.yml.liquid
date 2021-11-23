@@ -1,0 +1,32 @@
+in:
+  type: google_spreadsheets
+  auth_method: service_account
+  json_keyfile: {{ env.GCP_SERVICE_JSON }}
+  spreadsheets_url: {{ env.SPREADSHEETS_TABLE }}
+  default_timezone: 'Asia/Tokyo'
+  worksheet_title: year_purchase_amount
+  start_row: 2
+  columns:
+    - {name: id, type: long}
+    - {name: date, type: timestamp, format: '%Y/%m/%d', timezone: 'Asia/Tokyo'}
+    - {name: category, type: string}
+    - {name: purchaser, type: string}
+    - {name: purchase_amount, type: long}
+    - {name: memo, type: string}
+
+out:
+  type: bigquery
+  mode: replace
+  auth_method: service_account
+  json_keyfile: {{ env.GCP_SERVICE_JSON }}
+  project: {{ env.BIGQUERY_PROJECT }}
+  dataset: {{ env.BIGQUERY_PURCHASE_AMOUNT_DATASET }}
+  table: daily_purchase_amount
+  auto_create_table: true
+  source_format: NEWLINE_DELIMITED_JSON
+  default_timezone: 'Asia/Tokyo'
+  default_timestamp_format: '%Y-%m-%d'
+  formatter: {type: jsonl}
+  encoders:
+    - {type: gzip}
+  retries: 3
