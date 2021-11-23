@@ -8,5 +8,4 @@
 ## Data integration
 - Input: Spreadsheets
 - Output: BigQuery in Google Cloud Platform
-- Technology Stack
-    - Embulk: data loader
+- [README.md](./embulk/README.md)
