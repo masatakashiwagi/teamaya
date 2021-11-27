@@ -8,7 +8,7 @@ x-template: &template
           GITHUB_USER: $GITHUB_USER
           GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN
   volumes:
-    - ./config:/opt/embulk/config:cached
+    - ./teamaya/data_integration/embulk/task:/opt/embulk/task:cached
     - ~/.gcp:/root/.gcp:cached
 
 services:

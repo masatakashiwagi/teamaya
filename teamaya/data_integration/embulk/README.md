@@ -12,14 +12,14 @@ docker compose up -d embulk
 ```
 
 ### Run the container
-- Run the liquid file under the directory `config/`.
+- Run the liquid file under the directory `task/`.
 
 ```bash
 # dry-run
-docker exec embulk sh /embulk/bin/embulk preview -b bundle config/spreadsheet/export_hab_purchase_amount.yml.liquid
+docker exec embulk sh /embulk/bin/embulk preview -b bundle task/spreadsheet/export_hab_purchase_amount.yml.liquid
 
 # production-run
-docker exec embulk sh /embulk/bin/embulk run -b bundle config/spreadsheet/export_hab_purchase_amount.yml.liquid
+docker exec embulk sh /embulk/bin/embulk run -b bundle task/spreadsheet/export_hab_purchase_amount.yml.liquid
 ```
 
 ### Results

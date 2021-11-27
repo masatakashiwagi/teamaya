@@ -21,7 +21,7 @@ ENV PATH="$PATH:/embulk/bin"
 RUN apk --update add libc6-compat
 
 # Copy Embulk configuration
-COPY ./config /opt/embulk/config
+COPY ./teamaya/data_integration/embulk/task /opt/embulk/task
 
 # Make bundle
 WORKDIR /opt/embulk
@@ -29,8 +29,8 @@ RUN embulk mkbundle bundle
 
 # Copy Gemfile file
 # This is the workaround, because jruby directory is not created
-COPY ./bundle/Gemfile /opt/embulk/bundle
-COPY ./bundle/Gemfile.lock /opt/embulk/bundle
+COPY ./teamaya/data_integration/embulk/bundle/Gemfile /opt/embulk/bundle
+COPY ./teamaya/data_integration/embulk/bundle/Gemfile.lock /opt/embulk/bundle
 WORKDIR /opt/embulk/bundle
 
 # Install Embulk Plugins
