@@ -9,6 +9,8 @@ RUN apk --update add --virtual build-dependencies \
     tzdata \
     coreutils \
     bash \
+    postgresql-client \
+    musl-dev postgresql-dev postgresql-libs \
     && curl --create-dirs -o /bin/digdag -L "https://dl.digdag.io/digdag-${DIGDAG_VERSION}" \
     && curl --create-dirs -o /bin/embulk -L "https://dl.embulk.org/embulk-$EMBULK_VERSION.jar" \
     && chmod +x /bin/digdag \
@@ -45,4 +47,28 @@ COPY ./teamaya/data_integration/digdag /opt/digdag
 # RUN chmod +x /bin/wait
 WORKDIR /opt/digdag
 
+# COPY ./teamaya/data_integration/digdag/entrypoint.sh /bin
+# RUN chmod +x /bin/entrypoint.sh
+
 CMD ["tail", "-f", "/dev/null"]
+# ENTRYPOINT ["sh","/bin/entrypoint.sh","/bin/digdag","server","--config","/opt/digdag/digdag.properties"]
+
+# ENV DB_TYPE=postgresql \
+#     DB_USER=digdag \
+#     DB_PASSWORD=digdag \
+#     DB_HOST=postgresql \
+#     DB_PORT=5432 \
+#     DB_NAME=digdag
+
+# CMD exec digdag server --bind $SERVER_BIND \
+#                        --port $SERVER_PORT \
+#                        --config /opt/digdag/server.properties \
+#                        --log /var/lib/digdag/logs/server \
+#                        --task-log /var/lib/digdag/logs/tasks \
+#                        -X database.type=$DB_TYPE \
+#                        -X database.user=$DB_USER \
+#                        -X database.password=$DB_PASSWORD \
+#                        -X database.host=$DB_HOST \
+#                        -X database.port=$DB_PORT \
+#                        -X database.database=$DB_NAME \
+#                        -X database.maximumPoolSize=32

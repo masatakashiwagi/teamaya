@@ -2,47 +2,45 @@ version: '3.4'
 
 # template for common definition
 x-template: &template
-  # build:
-  #   context: .
-  #   args:
-  #         GITHUB_USER: $GITHUB_USER
-  #         GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN
+  build:
+    context: .
+    args:
+          GITHUB_USER: $GITHUB_USER
+          GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN
   volumes:
-    - ./teamaya/data_integration/embulk/task:/opt/embulk/task:cached
+    # - ./teamaya/data_integration/embulk/task:/opt/embulk/task:cached
     - ~/.gcp:/root/.gcp:cached
     - /var/run/docker.sock:/var/run/docker.sock
 
 services:
-  # postgres:
-  #   image: postgres:13.1-alpine
-  #   build: ./teamaya/data_integration/postgres
-  #   container_name: postgres
-  #   ports:
-  #     - "5432:5432"
-  #   environment:
-  #     POSTGRES_USER: digdag
-  #     POSTGRES_PASSWORD: digdag
-  #     PGPASSWORD: digdag
-  #     POSTGRES_DB: digdag_db
-  #     DATABASE_HOST: localhost
-  #   tty: true
-  #   <<: *template
+  postgres:
+    image: postgres:13.1-alpine
+    container_name: postgres_etl
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: digdag
+      POSTGRES_PASSWORD: digdag
+      PGPASSWORD: digdag
+      POSTGRES_DB: digdag_db
+      DATABASE_HOST: postgresql
+    tty: true
+    <<: *template
 
   digdag:
     image: openjdk:8-alpine
-    build: ./
-    container_name: digdag
+    container_name: digdag_etl
     ports:
       - "65432:65432"
       - "65433:65433"
-    # depends_on:
-    #   - postgres
+    depends_on:
+      - postgres
     # environment:
-      # POSTGRES_HOST: localhost
-      # POSTGRES_DB: digdag_db
-      # POSTGRES_USER: digdag
-      # POSTGRES_PASSWORD: digdag
-      # WAIT_HOSTS: postgresql:5432
+    #   POSTGRES_HOST: postgresql
+    #   POSTGRES_DB: digdag_db
+    #   POSTGRES_USER: digdag
+    #   POSTGRES_PASSWORD: digdag
+    #   WAIT_HOSTS: postgresql:5432
     volumes:
       - "/tmp:/tmp"
     tty: true
@@ -50,8 +48,7 @@ services:
 
   embulk:
     image: openjdk:8-alpine
-    build: ./
-    container_name: embulk
+    container_name: embulk_etl
     environment:
       SPREADSHEETS_TABLE: $SPREADSHEETS_TABLE
       BIGQUERY_PROJECT: teamaya-8131
