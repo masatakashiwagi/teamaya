@@ -16,10 +16,10 @@ docker compose up -d embulk
 
 ```bash
 # dry-run
-docker exec embulk sh /embulk/bin/embulk preview -b bundle task/spreadsheet/export_hab_purchase_amount.yml.liquid
+docker exec embulk sh /bin/embulk preview -b bundle task/spreadsheet/export_hab_purchase_amount.yml.liquid
 
 # production-run
-docker exec embulk sh /embulk/bin/embulk run -b bundle task/spreadsheet/export_hab_purchase_amount.yml.liquid
+docker exec embulk sh /bin/embulk run -b bundle task/spreadsheet/export_hab_purchase_amount.yml.liquid
 ```
 
 ### Results
