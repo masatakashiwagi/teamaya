@@ -8,4 +8,4 @@
 ## Data integration
 - Input: Spreadsheets
 - Output: BigQuery in Google Cloud Platform
-- [README.md](./embulk/README.md)
+- [README.md](./teamaya/README.md)
