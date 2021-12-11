@@ -16,7 +16,13 @@
 
 ### Starting the container
 ```bash
+# clone
+git clone https://github.com/masatakashiwagi/teamaya.git
 cd teamaya/workflow
+
+# build
 docker compose build
+
+# run
 docker compose up -d digdag
 ```
