@@ -7,19 +7,19 @@
 - Start embulk container services in the background of the local environment.
 
 ```bash
-cd embulk
+cd teamaya/workflow
 docker compose up -d embulk
 ```
 
 ### Run the container
-- Run the liquid file under the directory `config/`.
+- Run the liquid file under the directory `task/`.
 
 ```bash
 # dry-run
-docker exec embulk sh /embulk/bin/embulk preview -b bundle config/spreadsheet/export_hab_purchase_amount.yml.liquid
+docker exec embulk sh /bin/embulk preview -b embulk/bundle embulk/task/spreadsheet/export_hab_purchase_amount.yml.liquid
 
 # production-run
-docker exec embulk sh /embulk/bin/embulk run -b bundle config/spreadsheet/export_hab_purchase_amount.yml.liquid
+docker exec embulk sh /bin/embulk run -b embulk/bundle embulk/task/spreadsheet/export_hab_purchase_amount.yml.liquid
 ```
 
 ### Results
@@ -29,8 +29,8 @@ docker exec embulk sh /embulk/bin/embulk run -b bundle config/spreadsheet/export
 - The project and dataset must have been created in GCP beforehand.
     - project: `teamaya-8131`
     - dataset: `purchase_amount_source_spreadsheets`
-- You need to set the environment variables.
+- You need to set the environment variables to `.env` file.
     - SPREADSHEETS_TABLE: Spreadsheets file URL
-        - `export SPREADSHEETS_TABLE=<URL>`
+        - `SPREADSHEETS_TABLE=<URL>`
     - GCP_SERVICE_JSON: Credential json file for service account.
-        - `export GCP_SERVICE_JSON=/root/.gcp/teamaya.json`
+        - `GCP_SERVICE_JSON=<credential json file path>`

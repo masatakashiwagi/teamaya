@@ -1,0 +1,48 @@
+version: '3.8'
+
+# Common definition
+x-template: &template
+  volumes:
+      - ~/.gcp:/root/.gcp:cached
+      - /tmp:/tmp
+  env_file:
+      - .env
+
+services:
+  digdag:
+    container_name: digdag
+    build: .
+    tty: true
+    ports:
+      - 65432:65432
+      - 65433:65433
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    command: ["java", "-jar", "/bin/digdag", "server", "-c", "digdag/server.properties", "--log", "/var/log/digdag/digdag_server.log", "--task-log", "/var/log/digdag/task_logs"]
+    depends_on:
+      - postgres
+    <<: *template
+  
+  postgres:
+    image: postgres:13.1-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: digdag
+      POSTGRES_USER: digdag
+      POSTGRES_PASSWORD: digdag
+    volumes:
+      - /tmp/data:/var/lib/postgresql/data
+    tty: true
+    <<: *template
+  
+  embulk:
+    container_name: embulk
+    build: .
+    <<: *template
+
+networks:
+  default:
+    external:
+      name: teamaya
