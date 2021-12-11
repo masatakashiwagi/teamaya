@@ -1,6 +1,6 @@
-+run_embulk:
++task:
     _retry: 1
-    sh>: /bin/embulk run -b embulk/bundle embulk/task/spreadsheet/export_hab_purchase_amount.yml.liquid
+    sh>: /bin/embulk run -b /opt/workflow/embulk/bundle /opt/workflow/embulk/task/spreadsheet/export_hab_purchase_amount.yml.liquid
     _error:
         echo>: wordkflow error...
 +success:

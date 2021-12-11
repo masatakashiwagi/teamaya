@@ -9,3 +9,9 @@
 - Input: Spreadsheets
 - Output: BigQuery in Google Cloud Platform
 - [README.md](./teamaya/README.md)
+
+### Starting the container
+```bash
+cd teamaya/workflow
+docker compose up -d digdag
+```
