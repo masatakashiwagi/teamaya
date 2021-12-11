@@ -17,5 +17,6 @@
 ### Starting the container
 ```bash
 cd teamaya/workflow
+docker compose build
 docker compose up -d digdag
 ```
