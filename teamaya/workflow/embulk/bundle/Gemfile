@@ -7,6 +7,6 @@ gem 'embulk'
 
 # input spreadsheets plugin
 gem 'embulk-input-google_spreadsheets'
-# ouput bq plugin
+# ouput bigquery plugin
 gem 'embulk-output-bigquery'
 gem 'tzinfo-data'
