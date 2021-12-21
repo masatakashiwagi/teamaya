@@ -26,3 +26,6 @@ docker compose build
 # run
 docker compose up -d digdag
 ```
+
+### Access UI
+You can access localhost in your environment. → http://localhost:65432/
