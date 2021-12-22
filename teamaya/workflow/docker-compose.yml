@@ -20,7 +20,8 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
     command: ["java", "-jar", "/bin/digdag", "server", "-c", "digdag/server.properties", "--log", "/var/log/digdag/digdag_server.log", "--task-log", "/var/log/digdag/task_logs"]
     depends_on:
-      - postgres
+      postgres:
+        condition: service_started
     <<: *template
   
   postgres:
