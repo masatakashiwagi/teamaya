@@ -1,0 +1,11 @@
+boto3
+pandas
+numpy
+scikit-learn
+pyyaml
+uvicorn
+fastapi
+psutil
+PyYAML
+pika
+matplotlib

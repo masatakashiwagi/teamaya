@@ -1,0 +1,66 @@
+version: '3.8'
+
+# Common definition
+x-template: &template
+  volumes:
+      - ~/.gcp:/root/.gcp:cached
+      - ~/.aws:/root/.aws:cached
+      - ./app:/opt/program:cached
+  env_file:
+      - .env
+  environment:
+      TZ: Asia/Tokyo
+      LANG: 'ja_JP.UTF-8'
+  restart: always
+  tty: true
+
+services:
+  producer:
+    # FastAPI for producer
+    container_name: producer
+    build:
+      context: .
+    ports:
+      - 5000:5000
+    command: ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "5000", "--access-log"]
+    depends_on:
+      - rabbitmq
+    <<: *template
+
+  consumer:
+    container_name: consumer
+    hostname: consumer
+    build:
+      context: .
+    command: python3 consumer/consumer.py
+    depends_on:
+      - rabbitmq
+    <<: *template
+
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    volumes:
+      # - ./app/rabbitmq/etc:/etc/rabbitmq/rabbitmq
+      - ./app/rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./app/rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./app/rabbitmq/data:/var/lib/rabbitmq
+      - ./app/rabbitmq/logs:/var/log/rabbitmq
+      - ~/.aws:/root/.aws:cached
+    ports:
+      # AMQP protocol port
+      - 5672:5672
+      # HTTP management UI
+      - 15672:15672
+    environment:
+      TZ: Asia/Tokyo
+      LANG: 'ja_JP.UTF-8'
+    env_file:
+      - .env
+
+# networks:
+#   default:
+#     external:
+#       name: teamaya-network-async
