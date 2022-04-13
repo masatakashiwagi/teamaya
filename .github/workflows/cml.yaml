@@ -15,10 +15,13 @@ jobs:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_PATH_NAME: ${{ secrets.S3_PATH_NAME }}
           S3_MODEL_PATH_NAME: ${{ secrets.S3_MODEL_PATH_NAME }}
-          PYTHONPATH: async-processing/app/consumer
+          # PYTHONPATH: async-processing/app/consumer
         run: |
-          python3 -m pip install -r async-processing/requirements.lock
-          cd async-processing/app
+          cd async-processing
+          docker compose up -d
+          docker exec -it consumer /bin/bash
+          # python3 -m pip install -r async-processing/requirements.lock
+          # cd async-processing/app
           python3 consumer/tasks.py
           # Create CML report
           echo "## Metrics" >> report.md
