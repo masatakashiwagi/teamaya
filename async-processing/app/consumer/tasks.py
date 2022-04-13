@@ -238,7 +238,8 @@ if __name__ == "__main__":
 
     # Record the metrics
     outfile = "data/metrics.txt"
-    os.makedirs(outfile, exist_ok=True)
+    if not os.path.isdir("data"):
+        os.mkdir("data")
     with open(outfile, "w") as f:
         f.write("RMSE: " + f"{rmse:.2f}" + "\n")
 
