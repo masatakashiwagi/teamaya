@@ -237,14 +237,16 @@ if __name__ == "__main__":
     rmse = result['metrics']['rmse']
 
     # Record the metrics
-    outfile = "metrics.txt"
+    outfile = "data/metrics.txt"
+    if not os.path.isdir("data"):
+        os.mkdir("data")
     with open(outfile, "w") as f:
         f.write("RMSE: " + f"{rmse:.2f}" + "\n")
 
     # Plot results
     y_valid = result['y_true']
     y_pred = result['y_pred']
-    savepath_yy = "yy_plot.png"
+    savepath_yy = "data/yy_plot.png"
     plot_yy(y_valid, y_pred, metrics=rmse, savepath=savepath_yy)
-    savepath_residual = "residual_plot.png"
+    savepath_residual = "data/residual_plot.png"
     plot_residual(y_valid, y_pred, savepath=savepath_residual)

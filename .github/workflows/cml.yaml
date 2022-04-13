@@ -20,15 +20,12 @@ jobs:
           cd async-processing
           docker compose up -d
           docker compose exec -T consumer python3 consumer/tasks.py
-          # python3 -m pip install -r async-processing/requirements.lock
-          # cd async-processing/app
-          # python3 consumer/tasks.py
           # Create CML report
           echo "## Metrics" >> report.md
-          cat metrics.txt >> report.md
+          cat app/data/metrics.txt >> report.md
           echo "## Plots" >> report.md
           echo "### YY-plot" >> report.md
-          cml publish yy_plot.png --md --title 'YY Plot' >> report.md
+          cml publish app/data/yy_plot.png --md --title 'YY Plot' >> report.md
           echo "### Residual-plot" >> async-processing/report.md
-          cml publish residual_plot.png --md --title 'Residual Plot' >> report.md
+          cml publish app/data/residual_plot.png --md --title 'Residual Plot' >> report.md
           cml send-comment report.md
