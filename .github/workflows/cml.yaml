@@ -25,10 +25,10 @@ jobs:
           # python3 consumer/tasks.py
           # Create CML report
           echo "## Metrics" >> report.md
-          cat data/metrics.txt >> report.md
+          cat metrics.txt >> report.md
           echo "## Plots" >> report.md
           echo "### YY-plot" >> report.md
-          cml publish data/yy_plot.png --md --title 'YY Plot' >> report.md
+          cml publish yy_plot.png --md --title 'YY Plot' >> report.md
           echo "### Residual-plot" >> async-processing/report.md
-          cml publish data/residual_plot.png --md --title 'Residual Plot' >> report.md
+          cml publish residual_plot.png --md --title 'Residual Plot' >> report.md
           cml send-comment report.md
