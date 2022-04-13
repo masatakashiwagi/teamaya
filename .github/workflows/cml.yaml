@@ -17,15 +17,15 @@ jobs:
           S3_PATH_NAME: ${{ secrets.S3_PATH_NAME }}
           S3_MODEL_PATH_NAME: ${{ secrets.S3_MODEL_PATH_NAME }}
         run: |
-          printenv
           python3 -m pip install -r async-processing/requirements.lock
-          python3 async-processing/app/consumer/tasks.py
+          cd async-processing/app
+          python3 consumer/tasks.py
           # Create CML report
-          echo "## Metrics" >> async-processing/report.md
-          cat async-processing/app/data/metrics.txt >> async-processing/report.md
-          echo "## Plots" >> async-processing/report.md
-          echo "### YY-plot" >> async-processing/report.md
-          cml publish async-processing/app/data/yy_plot.png --md --title 'YY Plot' >> async-processing/report.md
+          echo "## Metrics" >> report.md
+          cat data/metrics.txt >> report.md
+          echo "## Plots" >> report.md
+          echo "### YY-plot" >> report.md
+          cml publish data/yy_plot.png --md --title 'YY Plot' >> report.md
           echo "### Residual-plot" >> async-processing/report.md
-          cml publish async-processing/app/data/residual_plot.png --md --title 'Residual Plot' >> async-processing/report.md
-          cml send-comment async-processing/report.md
+          cml publish data/residual_plot.png --md --title 'Residual Plot' >> report.md
+          cml send-comment report.md
