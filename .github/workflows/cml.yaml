@@ -12,6 +12,7 @@ jobs:
       - name: Train model
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+          PYTHONPATH: async-processing/app/consumer/
         run: |
           pip3 install -r async-processing/requirements.txt
           python async-processing/app/consumer/tasks.py
