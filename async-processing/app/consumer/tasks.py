@@ -34,7 +34,14 @@ class TrainConsumer(BaseConsumer):
         LOGGER.info("Read csv file and transform to dataframe.")
 
         try:
-            _ = self.train(df, params)
+            result = train(df, params)
+
+            # save model
+            model_path = 'data/model.pkl'
+            self.save_model(result['model'], model_path)
+            LOGGER.info("Save trained model to local.")
+
+            # upload model to cloud storage
             model_id = params['model_id']
             self.upload_to_s3(S3_BUCKET_NAME, S3_MODEL_PATH_NAME + f'{model_id}/', 'data/', 'model.pkl')
             LOGGER.info("Upload trained model to S3.")
@@ -63,48 +70,6 @@ class TrainConsumer(BaseConsumer):
         )
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    def train(self, df: pd.DataFrame, params) -> Dict[str, Any]:
-        """Train machine learning model
-
-        Args:
-            df (pd.DataFrame): dataset for training model
-            params (dict): parameters for training
-        """
-        features = params['features']
-        target = params['target']
-        X, y = df[features], df[target].values
-
-        # train/test split
-        X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
-
-        LOGGER.info("Start model training.")
-        # machine learning model: RandomForestRegressor
-        reg_model = RandomForestRegressor(max_depth=3, random_state=42, n_estimators=100)
-        reg_model.fit(X_train, y_train)
-        LOGGER.info("Model fit for training.")
-
-        # save model
-        model_path = 'data/model.pkl'
-        self.save_model(reg_model, model_path)
-        LOGGER.info("Save trained model to local.")
-
-        # evaluate model
-        pred = reg_model.predict(X_valid)
-
-        # evaluate metrics
-        eval_metrics = EvalMetrics()
-        rmse = eval_metrics.rmse_score(y_valid, pred)
-        LOGGER.info("Evaluate metrics=RMSE for valid dataset : %.3f" % rmse)
-        LOGGER.info("Finish model training.")
-
-        result = {
-            'y_pred': pred,
-            'y_true': y_valid,
-            'metrics': {'rmse': rmse}
-        }
-
-        return result
-
 
 class PredictConsumer(BaseConsumer):
     def __init__(self, queue_name: QueueNames):
@@ -121,7 +86,7 @@ class PredictConsumer(BaseConsumer):
         LOGGER.info("Load model for prediction.")
 
         try:
-            result = self.predict(model, params)
+            result = predict(model, params)
 
             payload = {
                 'status': 'TASK_COMPLETED',
@@ -147,23 +112,63 @@ class PredictConsumer(BaseConsumer):
         )
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    def predict(self, model: object, params) -> Dict[str, Any]:
-        """Prediction for dataset using trained model
 
-        Args:
-            model (object): trained model
-            params (_type_): parameters for prediction
+def train(df: pd.DataFrame, params) -> Dict[str, Any]:
+    """Train machine learning model (RandomForestRegressor)
 
-        Returns:
-            float: predict probability
-        """
-        input_data = params['input_data']
-        pred_proba = model.predict(pd.DataFrame([input_data]))
-        result = {
-            'pred_proba': pred_proba[0]
-        }
+    Args:
+        df (pd.DataFrame): dataset for training model
+        params (dict): parameters for training
+    """
+    features = params['features']
+    target = params['target']
+    X, y = df[features], df[target].values
 
-        return result
+    # train/test split
+    X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    LOGGER.info("Start model training.")
+    # machine learning model: RandomForestRegressor
+    reg_model = RandomForestRegressor(max_depth=3, random_state=42, n_estimators=100)
+    reg_model.fit(X_train, y_train)
+    LOGGER.info("Model fit for training.")
+
+    # evaluate model
+    pred = reg_model.predict(X_valid)
+
+    # evaluate metrics
+    eval_metrics = EvalMetrics()
+    rmse = eval_metrics.rmse_score(y_valid, pred)
+    LOGGER.info("Evaluate metrics=RMSE for valid dataset : %.3f" % rmse)
+    LOGGER.info("Finish model training.")
+
+    result = {
+        'y_pred': pred,
+        'y_true': y_valid,
+        'metrics': {'rmse': rmse},
+        'model': reg_model
+    }
+
+    return result
+
+
+def predict(model: object, params) -> Dict[str, Any]:
+    """Prediction for dataset using trained model
+
+    Args:
+        model (object): trained model
+        params (_type_): parameters for prediction
+
+    Returns:
+        float: predict probability
+    """
+    input_data = params['input_data']
+    pred_proba = model.predict(pd.DataFrame([input_data]))
+    result = {
+        'pred_proba': pred_proba[0]
+    }
+
+    return result
 
 
 if __name__ == "__main__":
@@ -227,7 +232,7 @@ if __name__ == "__main__":
     }
     dataset_path = 'test/' + params['dataset_id'] + '.csv'
     df = pd.read_csv(dataset_path)
-    result = TrainConsumer(queue_name='queue.model.train').train(df, params)
+    result = train(df, params)
 
     rmse = result['metrics']['rmse']
 
