@@ -14,8 +14,9 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           PYTHONPATH: async-processing/app/
         run: |
-          pip3 install -r async-processing/requirements.txt
-          python async-processing/app/consumer/tasks.py
+          printenv
+          python3 -m pip install -r async-processing/requirements.lock
+          python3 async-processing/app/consumer/tasks.py
           # Create CML report
           echo "## Metrics" >> async-processing/report.md
           cat async-processing/app/data/metrics.txt >> async-processing/report.md
