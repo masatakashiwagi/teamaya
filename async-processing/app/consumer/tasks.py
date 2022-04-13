@@ -237,8 +237,10 @@ if __name__ == "__main__":
     rmse = result['metrics']['rmse']
 
     # Record the metrics
-    with open("data/metrics.txt", "w") as outfile:
-        outfile.write("RMSE: " + f"{rmse:.2f}" + "\n")
+    outfile = "data/metrics.txt"
+    os.makedirs(outfile, exist_ok=True)
+    with open(outfile, "w") as f:
+        f.write("RMSE: " + f"{rmse:.2f}" + "\n")
 
     # Plot results
     y_valid = result['y_true']
