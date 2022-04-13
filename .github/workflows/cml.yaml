@@ -19,7 +19,7 @@ jobs:
         run: |
           cd async-processing
           docker compose up -d
-          docker exec -it consumer /bin/bash
+          docker exec -T consumer /bin/bash
           # python3 -m pip install -r async-processing/requirements.lock
           # cd async-processing/app
           python3 consumer/tasks.py
