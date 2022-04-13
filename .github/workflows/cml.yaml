@@ -13,6 +13,9 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           PYTHONPATH: async-processing/app/
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          S3_PATH_NAME: ${{ secrets.S3_PATH_NAME }}
+          S3_MODEL_PATH_NAME: ${{ secrets.S3_MODEL_PATH_NAME }}
         run: |
           printenv
           python3 -m pip install -r async-processing/requirements.lock
