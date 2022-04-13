@@ -19,6 +19,7 @@ jobs:
         run: |
           python3 -m pip install -r async-processing/requirements.lock
           cd async-processing/app
+          pwd
           python3 consumer/tasks.py
           # Create CML report
           echo "## Metrics" >> report.md
