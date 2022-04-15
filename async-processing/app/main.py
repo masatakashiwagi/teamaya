@@ -21,7 +21,6 @@ app.add_middleware(
 
 # Routes
 app.include_router(producer.router)
-# app.include_router(predict.router)
 
 
 # For Health Check
