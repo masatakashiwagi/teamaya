@@ -173,22 +173,21 @@ def predict(model: object, params) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     def plot_yy(y_valid, y_pred, metrics, savepath):
-        """yy-plotで結果を可視化
+        """Vizualize the results using yy-plot
         """
         y_max = np.max(y_valid)
         y_min = np.min(y_valid)
 
-        # y_predの最大値、最小値を計算する。
+        # calculate max and min of y_pred
         predict_y_max = np.max(y_pred)
         predict_y_min = np.min(y_pred)
 
-        # 全てのプロットが収まるようにするには、y_validとy_pred両方のうち
-        # 最も小さい値、最も大きい値を縦軸横軸の範囲にすればいい。
+        # use the smallest and largest value of either of both y_valid and y_pred
+        # as the range of the vertical axis horizontal axis
         axis_max = max(y_max, predict_y_max)
         axis_min = min(y_min, predict_y_min)
 
-        # プロットエリアの長さは縦横ともにaxis_max-axis_min。
-        # これの5%の長さ分の余白を取る。
+        # margin of 5% of the length
         axis_max = axis_max + (axis_max - axis_min) * 0.05
         axis_min = axis_min - (axis_max - axis_min) * 0.05
 
