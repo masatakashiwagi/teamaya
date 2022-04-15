@@ -13,7 +13,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 LOGGER = get_logger()
 
-# queue nameとして取り得る値
+# Possible values as queue name
 QueueNames = Literal['queue.model.train', 'queue.model.predict']
 
 
