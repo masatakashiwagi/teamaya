@@ -8,7 +8,7 @@ from logger import get_logger
 
 LOGGER = get_logger()
 
-# queue nameとして取り得る値
+# Possible values as queue name
 QueueNames = Literal['queue.model.train', 'queue.model.predict']
 RepQueueNames = Literal['queue.reply.train', 'queue.reply.predict']
 
@@ -39,7 +39,7 @@ class BaseProducer:
         """consumerにmessageを送る
 
         Args:
-            message (dict): メッセージ情報が入ったdict
+            message (dict): message info
         """
         self.response = None
         self.corr_id = str(uuid.uuid4())
