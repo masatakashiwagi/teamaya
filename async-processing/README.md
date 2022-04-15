@@ -12,6 +12,7 @@
 - Containerize FastAPI, RabbitMQ, and Consumer with Docker.
 
 ## Architecture
+![async-apps1](https://user-images.githubusercontent.com/37064567/163514038-41484608-3590-4887-af77-25514d1d0843.png)
 
 ## Usage
 ### Start/Stop containers
