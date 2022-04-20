@@ -9,7 +9,7 @@ from producer.schema import ApiSchemaPredict, ApiSchemaTrain, ProducerResult
 
 LOGGER = get_logger()
 
-router = APIRouter(prefix='/producers', tags=["producers"])
+router = APIRouter(prefix='', tags=["producers"])
 
 
 class ProducerTrain(BaseProducer):
