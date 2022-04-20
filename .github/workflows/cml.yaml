@@ -1,5 +1,8 @@
 name: train-my-model
-on: [push]
+on:
+  push:
+    paths:
+      - 'async-processing/app/consumer/tasks.py'
 jobs:
   train-model:
     runs-on: ubuntu-latest
