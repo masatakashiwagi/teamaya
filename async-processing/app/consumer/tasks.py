@@ -26,6 +26,21 @@ class TrainConsumer(BaseConsumer):
 
     def callback(self, ch, method, props, body):
         params = self.body2dict(body)
+
+        payload = {
+            'status': 'TASK_RECEIVED',
+            'model_id': params['model_id']
+        }
+        response = json.dumps(payload)
+
+        ch.basic_publish(
+            exchange='',
+            routing_key=props.reply_to,
+            properties=pika.BasicProperties(correlation_id=props.correlation_id),
+            body=response
+        )
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+
         self.download_from_s3(S3_BUCKET_NAME, S3_PATH_NAME, 'data/', params['dataset_id'] + '.csv')
         LOGGER.info("Download dataset from S3.")
 
@@ -45,30 +60,12 @@ class TrainConsumer(BaseConsumer):
             model_id = params['model_id']
             self.upload_to_s3(S3_BUCKET_NAME, S3_MODEL_PATH_NAME + f'{model_id}/', 'data/', 'model.pkl')
             LOGGER.info("Upload trained model to S3.")
-
-            payload = {
-                'status': 'TASK_COMPLETED',
-                'model_id': params['model_id']
-            }
-            response = json.dumps(payload)
+            LOGGER.info("TASK_COMPLETED")
         except Exception as e:
             _, _, tb = sys.exc_info()
             LOGGER.error(
-                f'Exception Error: {e} || Type: {str(type(e))} || Traceback Message: {traceback.format_tb(tb)}')
-
-            payload = {
-                'status': 'TASK_ERROR',
-                'model_id': params['model_id']
-            }
-            response = json.dumps(payload)
-
-        ch.basic_publish(
-            exchange='',
-            routing_key=props.reply_to,
-            properties=pika.BasicProperties(correlation_id=props.correlation_id),
-            body=response
-        )
-        ch.basic_ack(delivery_tag=method.delivery_tag)
+                f"Exception Error: {e} || Type: {str(type(e))} || Traceback Message: {traceback.format_tb(tb)}")
+            LOGGER.error("TASK_ERROR")
 
 
 class PredictConsumer(BaseConsumer):
@@ -96,7 +93,7 @@ class PredictConsumer(BaseConsumer):
         except Exception as e:
             _, _, tb = sys.exc_info()
             LOGGER.error(
-                f'Exception Error: {e} || Type: {str(type(e))} || Traceback Message: {traceback.format_tb(tb)}')
+                f"Exception Error: {e} || Type: {str(type(e))} || Traceback Message: {traceback.format_tb(tb)}")
 
             payload = {
                 'status': 'TASK_ERROR',
