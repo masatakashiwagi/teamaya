@@ -36,7 +36,7 @@ class BaseProducer:
             self.response = body
 
     def send_message_to_consumer(self, message: dict):
-        """consumerにmessageを送る
+        """Send message
 
         Args:
             message (dict): message info
