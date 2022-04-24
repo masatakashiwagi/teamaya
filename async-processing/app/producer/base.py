@@ -35,6 +35,9 @@ class BaseProducer:
         if self.corr_id == props.correlation_id:
             self.response = body
 
+    def run(self):
+        raise NotImplementedError()
+
     def send_message_to_consumer(self, message: dict):
         """Send message
 
