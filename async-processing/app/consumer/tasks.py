@@ -110,7 +110,7 @@ class PredictConsumer(BaseConsumer):
         # ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def train(df: pd.DataFrame, params) -> Dict[str, Any]:
+def train(df: pd.DataFrame, params: dict) -> Dict[str, Any]:
     """Train machine learning model (RandomForestRegressor)
 
     Args:
@@ -149,12 +149,12 @@ def train(df: pd.DataFrame, params) -> Dict[str, Any]:
     return result
 
 
-def predict(model: object, params) -> Dict[str, Any]:
+def predict(model: object, params: dict) -> Dict[str, Any]:
     """Prediction for dataset using trained model
 
     Args:
         model (object): trained model
-        params (_type_): parameters for prediction
+        params (dict): parameters for prediction
 
     Returns:
         float: predict probability
