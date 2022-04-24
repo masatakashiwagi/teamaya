@@ -32,7 +32,7 @@ services:
     hostname: consumer
     build:
       context: .
-    command: python3 consumer/consumer.py
+    command: ["python3", "consumer/consumer.py", "--num_threads", "2"]
     depends_on:
       - rabbitmq
     <<: *template

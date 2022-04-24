@@ -39,7 +39,7 @@ class TrainConsumer(BaseConsumer):
             properties=pika.BasicProperties(correlation_id=props.correlation_id),
             body=response
         )
-        ch.basic_ack(delivery_tag=method.delivery_tag)
+        # ch.basic_ack(delivery_tag=method.delivery_tag)
 
         self.download_from_s3(S3_BUCKET_NAME, S3_PATH_NAME, 'data/', params['dataset_id'] + '.csv')
         LOGGER.info("Download dataset from S3.")
@@ -107,7 +107,7 @@ class PredictConsumer(BaseConsumer):
             properties=pika.BasicProperties(correlation_id=props.correlation_id),
             body=response
         )
-        ch.basic_ack(delivery_tag=method.delivery_tag)
+        # ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def train(df: pd.DataFrame, params) -> Dict[str, Any]:
