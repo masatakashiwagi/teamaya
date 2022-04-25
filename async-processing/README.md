@@ -27,7 +27,10 @@ docker compose build
 # start
 docker compose up
 
-# stop
+# stop: Stops a running container, but does not delete it
+docker compose stop
+
+# down: Delete a container network volume image created with "docker compose up" command
 docker compose down
 ```
 
