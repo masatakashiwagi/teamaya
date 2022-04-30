@@ -226,7 +226,7 @@ if __name__ == "__main__":
         "features": ["age", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"],
         "target": "target"
     }
-    dataset_path = 'test/' + params['dataset_id'] + '.csv'
+    dataset_path = 'test/data/' + params['dataset_id'] + '.csv'
     df = pd.read_csv(dataset_path)
     result = train(df, params)
 

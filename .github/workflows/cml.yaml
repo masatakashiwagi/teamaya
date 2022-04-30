@@ -27,7 +27,7 @@ jobs:
           cat app/data/metrics.txt >> report.md
           echo "## Plots" >> report.md
           echo "### YY-plot" >> report.md
-          cml publish app/data/yy_plot.png --md --title 'YY Plot' >> report.md
+          cml-publish app/data/yy_plot.png --md --title 'YY Plot' >> report.md
           echo "### Residual-plot" >> report.md
-          cml publish app/data/residual_plot.png --md --title 'Residual Plot' >> report.md
-          cml send-comment report.md
+          cml-publish app/data/residual_plot.png --md --title 'Residual Plot' >> report.md
+          cml-send-comment report.md
