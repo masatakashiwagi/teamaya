@@ -8,4 +8,5 @@ fastapi
 psutil
 PyYAML
 pika
+pytest
 matplotlib

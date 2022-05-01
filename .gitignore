@@ -130,5 +130,7 @@ dmypy.json
 .pyre/
 
 # Original
-data/
+!async-processing/app/test/data/
+async-processing/app/data/
+async-processing/app/rabbitmq/data/
 logs/
