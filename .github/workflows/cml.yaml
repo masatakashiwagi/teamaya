@@ -3,15 +3,19 @@ on:
   push:
     paths:
       - 'async-processing/app/consumer/tasks.py'
+  pull_request:
+    branches:
+      - dev
 jobs:
   train-model:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: iterative/setup-cml@v1
-      - uses: actions/setup-python@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.8'
       - name: Train model
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +31,7 @@ jobs:
           cat app/data/metrics.txt >> report.md
           echo "## Plots" >> report.md
           echo "### YY-plot" >> report.md
-          cml publish app/data/yy_plot.png --md --title 'YY Plot' >> report.md
+          cml-publish app/data/yy_plot.png --md --title 'YY Plot' >> report.md
           echo "### Residual-plot" >> report.md
-          cml publish app/data/residual_plot.png --md --title 'Residual Plot' >> report.md
-          cml send-comment report.md
+          cml-publish app/data/residual_plot.png --md --title 'Residual Plot' >> report.md
+          cml-send-comment report.md
