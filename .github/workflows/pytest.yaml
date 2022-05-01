@@ -18,7 +18,7 @@ jobs:
           cd async-processing
           python3 -m pip install --upgrade pip
           if [ -f requirements.lock ]; then pip3 install -r requirements.lock; fi
-          cd app
       - name: Test with pytest
         run: |
+          cd app
           python3 -m pytest
