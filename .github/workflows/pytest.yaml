@@ -1,0 +1,23 @@
+name: pytest
+on:
+  push:
+  pull_request:
+    branches:
+      - dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          cd async-processing
+          python3 -m pip install --upgrade pip
+          if [ -f requirements.lock ]; then pip install -r requirements.lock; fi
+      - name: Test with pytest
+        run: |
+          python3 -m pytest

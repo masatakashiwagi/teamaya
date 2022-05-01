@@ -1,4 +1,4 @@
-import sys; sys.path.append("/opt/program/consumer"), sys.path.append("/opt/program/producer")
+import sys; sys.path.append("consumer/"), sys.path.append("producer/")
 
 import pandas as pd
 import pytest

@@ -15,9 +15,9 @@ from sklearn.model_selection import train_test_split
 from base import BaseConsumer, EvalMetrics, QueueNames
 
 LOGGER = get_logger()
-S3_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
-S3_PATH_NAME = os.environ['S3_PATH_NAME']
-S3_MODEL_PATH_NAME = os.environ['S3_MODEL_PATH_NAME']
+S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
+S3_PATH_NAME = os.getenv('S3_PATH_NAME')
+S3_MODEL_PATH_NAME = os.getenv('S3_MODEL_PATH_NAME')
 
 
 class TrainConsumer(BaseConsumer):
@@ -169,7 +169,6 @@ def predict(model: object, params: dict) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    import glob
     def plot_yy(y_valid, y_pred, metrics, savepath):
         """Vizualize the results using yy-plot
         """
@@ -227,7 +226,6 @@ if __name__ == "__main__":
         "features": ["age", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"],
         "target": "target"
     }
-    print(glob.glob('test/*'))
     dataset_path = 'test/data/' + params['dataset_id'] + '.csv'
     df = pd.read_csv(dataset_path)
     result = train(df, params)
