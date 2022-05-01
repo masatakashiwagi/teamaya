@@ -169,6 +169,7 @@ def predict(model: object, params: dict) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
+    import glob
     def plot_yy(y_valid, y_pred, metrics, savepath):
         """Vizualize the results using yy-plot
         """
@@ -226,6 +227,7 @@ if __name__ == "__main__":
         "features": ["age", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"],
         "target": "target"
     }
+    print(glob.glob('test/*'))
     dataset_path = 'test/data/' + params['dataset_id'] + '.csv'
     df = pd.read_csv(dataset_path)
     result = train(df, params)
