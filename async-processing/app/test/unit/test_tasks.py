@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from consumer import tasks
+from numpy.testing import assert_equal
 
 
 @ pytest.mark.usefixtures("diabetes_regression_df")
@@ -25,8 +26,8 @@ class TestTrain:
         test_data_size = len(diabetes_regression_df) * test_size
         result = tasks.train(diabetes_regression_df, params)
 
-        assert result['y_pred'].shape[0] == test_data_size
-        assert result['y_pred'].shape[0] == result['y_true'].shape[0]
+        assert_equal(result['y_pred'].shape[0], test_data_size)
+        assert_equal(result['y_pred'].shape[0], result['y_true'].shape[0])
         assert isinstance(result['y_pred'], np.ndarray)
         assert isinstance(result['y_pred'][0], float)
         assert isinstance(result['y_true'], np.ndarray)
