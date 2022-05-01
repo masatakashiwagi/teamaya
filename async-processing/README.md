@@ -57,8 +57,11 @@ S3_MODEL_PATH_NAME=<Your model path to save machine learning model>
 ### Test
 Pytest for software code test
 ```python
+# install python library using requirements.lock
 python3 -m pip install --upgrade pip
 pip3 install -r requirements.lock
+
+# change directory
 cd app
 python3 -m pytest
 ```
