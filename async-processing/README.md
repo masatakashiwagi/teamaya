@@ -54,6 +54,13 @@ S3_PATH_NAME=<Your dataset path to train machine learning model>
 S3_MODEL_PATH_NAME=<Your model path to save machine learning model>
 ```
 
+### Test
+Pytest for software code test
+```python
+cd app
+python3 -m pytest
+```
+
 ## References
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [RabbitMQ](https://www.rabbitmq.com/)
