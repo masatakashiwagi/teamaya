@@ -1,0 +1,63 @@
+name: sam-stepfunctions-codepipeline
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+    types: [opened]
+    # paths:
+    #   - 'config/codepipeline-ver1.json'
+    #   - './github/workflows/codepipeline.yaml'
+  workflow_dispatch:
+
+jobs:
+  Build-Deploy-SAM:
+    name: Build & Deploy SAM for Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      # samによるdev環境のAWSリソース更新
+      - name: Build SAM & Deploy SAM
+        run: |
+          if ${{ github.base_ref == 'dev' }}; then
+            cd sam/env/dev
+            sam build
+            sam deploy --fail-on-empty-changeset --no-confirm-changeset
+          elif ${{ github.base_ref == 'main' }}; then
+            cd sam/env/prod
+            sam build
+            sam deploy --fail-on-empty-changeset --no-confirm-changeset
+          else
+            echo "Invalid branch name."
+            exit 1
+          fi
+
+  Update-CodePipeline:
+    name: Update Codepipeline for Step Functions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: Build-Deploy-SAM
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      - name: Update Codepipeline
+        run: aws codepipeline update-pipeline --pipeline file://config/codepipeline-ver1.json

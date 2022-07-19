@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Create Resource
+  - StepFunctions
+  - EventBridge
+
+Parameters:
+  EnvironmentVariable:
+    Description: 環境変数
+    Type: String
+    Default: prod
+  VersionVariable:
+    Description: バージョン番号
+    Type: String
+    Default: ver1
+  StepFunctionsExecutionRole:
+    Description: Step Functionsの実行ロール
+    Type: String
+    Default: arn:aws:iam::322695298880:role/StepFunctionsExecutionRole
+  SageMakerProcessingImage:
+    Description: SageMakerのProcessingJobを動かすImage
+    Type: String
+    Default: 322695298880.dkr.ecr.ap-northeast-1.amazonaws.com/tst-mkashiwagi-ecr:latest
+
+Resources:
+  # =======Step Functions for ProcessingJob======== #
+  ProdMLPipelinesStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: !Sub ${EnvironmentVariable}-sample-ml-pipelines-${VersionVariable}
+      DefinitionUri: ../../statemachine/sample-ml-pipelines-ver1.asl.json
+      DefinitionSubstitutions:
+        ProcessingJobRole: !Ref StepFunctionsExecutionRole
+        ProcessingImage: !Ref SageMakerProcessingImage
+        ProcessingEnvironment: !Ref EnvironmentVariable
+      Role: !Ref StepFunctionsExecutionRole
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Description: パイプライン用のスケジューラー
+            Enabled: False
+            Name: !Sub ${EnvironmentVariable}-sample-ml-pipelines-${VersionVariable}
+            Schedule: "cron(0 16 * * ? *)"

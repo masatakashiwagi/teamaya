@@ -1,0 +1,49 @@
+{
+  "Comment": "Sample ML pipelines",
+  "StartAt": "SageMaker-Hello-World",
+  "States": {
+    "SageMaker-Hello-World": {
+      "Comment": "Hello Worldを出力する",
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sagemaker:createProcessingJob.sync",
+      "Parameters": {
+        "RoleArn": "${ProcessingJobRole}",
+        "ProcessingJobName.$": "States.Format('{}', $$.Execution.Name)",
+        "AppSpecification": {
+          "ImageUri": "${ProcessingImage}",
+          "ContainerEntrypoint": [
+            "python3",
+            "/opt/program/src/hello.py"
+          ]
+        },
+        "ProcessingResources": {
+          "ClusterConfig": {
+            "InstanceCount": 1,
+            "InstanceType": "ml.t3.medium",
+            "VolumeSizeInGB": 10
+          }
+        },
+        "Environment": {
+          "PYTHON_ENV": "${ProcessingEnvironment}"
+        },
+        "StoppingCondition": {
+          "MaxRuntimeInSeconds": 86400
+        }
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "FailState"
+        }
+      ],
+      "End": true
+    },
+    "FailState": {
+      "Type": "Fail",
+      "Cause": "Error",
+      "Error": "Error"
+    }
+  }
+}
