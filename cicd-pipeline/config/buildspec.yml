@@ -1,0 +1,33 @@
+version: 0.2
+
+env:
+  variables:
+    ENV: "dev"
+    REPOSITORY_NAME: "tst-mkashiwagi-ecr"
+    IMAGE_TAG: "latest"
+    REGION: "ap-northeast-1"
+  parameter-store:
+    AWS_ACCOUNT_ID: "/CodeBuild/common/AWS_ACCOUNT_ID"
+    AWS_ACCESS_KEY_ID: "/CodeBuild/common/AWS_ACCESS_KEY_ID"
+    AWS_SECRET_ACCESS_KEY: "/CodeBuild/common/AWS_SECRET_ACCESS_KEY"
+phases:
+  pre_build:
+    commands:
+      #  - echo Login to Docker
+      #  - docker login --username $AWS_ACCESS_KEY_ID --password $AWS_SECRET_ACCESS_KEY
+      - echo Set ECR repository URI
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+  build:
+    commands:
+      - echo Build started
+      - echo Building the Docker Image
+      # - echo $REPOSITORY_URI/$REPOSITORY_NAME:$IMAGE_TAG
+      - docker build -t $REPOSITORY_URI/$REPOSITORY_NAME:$IMAGE_TAG container
+  post_build:
+    commands:
+      - echo Login to Amazon ECR
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      # ECRへのpush
+      - echo Pushing the Docker Image to ECR started
+      - docker push $REPOSITORY_URI/$REPOSITORY_NAME:$IMAGE_TAG

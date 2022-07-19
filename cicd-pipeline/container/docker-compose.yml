@@ -1,0 +1,21 @@
+version: '3.4'
+
+# 共通定義のテンプレート化
+x-template: &template
+  build:
+      context: .
+      args:
+          GITHUB_USER: $GITHUB_USER
+          GITHUB_ACCESS_TOKEN: $GITHUB_ACCESS_TOKEN
+  volumes:
+      - ./app:/opt/program:cached
+      - ~/.aws:/root/.aws:cached
+  env_file:
+      - .env
+
+services:
+  hello_world:
+    container_name: hello_world
+    image: hello_world:latest
+    command: python3 src/hello.py
+    <<: *template

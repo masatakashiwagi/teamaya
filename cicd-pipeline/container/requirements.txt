@@ -1,0 +1,14 @@
+boto3
+google-cloud-bigquery
+pandas
+numpy
+scikit-learn
+pyyaml
+flask
+tensorflow
+psutil
+PyYAML
+pyarrow
+sagemaker
+sagemaker-training
+sagemaker-experiments
