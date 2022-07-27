@@ -37,7 +37,6 @@ WORKDIR $PROGRAM_DIR
 ENV PATH="/opt/program:${PATH}"
 
 # SageMaker Training
-ARG CODE_VERSION=ver1
 RUN chmod +x $PROGRAM_DIR/src/hello.py
 ENV SAGEMAKER_PROGRAM $PROGRAM_DIR/src/hello.py
 
