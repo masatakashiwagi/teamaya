@@ -17,11 +17,11 @@ Parameters:
   StepFunctionsExecutionRole:
     Description: Step Functionsの実行ロール
     Type: String
-    Default: arn:aws:iam::322695298880:role/StepFunctionsExecutionRole
+    Default: arn:aws:iam::<AWSアカウントID>:role/StepFunctionsExecutionRole
   SageMakerProcessingImage:
     Description: SageMakerのProcessingJobを動かすImage
     Type: String
-    Default: 322695298880.dkr.ecr.ap-northeast-1.amazonaws.com/tst-mkashiwagi-ecr:latest
+    Default: <AWSアカウントID>.dkr.ecr.ap-northeast-1.amazonaws.com/tst-teamaya-ecr:latest
 
 Resources:
   # =======Step Functions for ProcessingJob======== #
