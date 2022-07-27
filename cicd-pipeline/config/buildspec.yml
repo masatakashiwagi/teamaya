@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     ENV: "dev"
-    REPOSITORY_NAME: "tst-mkashiwagi-ecr"
+    REPOSITORY_NAME: "tst-teamaya-ecr"
     IMAGE_TAG: "latest"
     REGION: "ap-northeast-1"
   parameter-store:
