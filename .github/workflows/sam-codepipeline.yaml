@@ -7,7 +7,7 @@ on:
       - main
     types: [opened]
     # paths:
-    #   - 'config/codepipeline-ver1.json'
+    #   - 'cicd-pipeline/config/dev-codepipeline-ver1.json'
     #   - './github/workflows/codepipeline.yaml'
   workflow_dispatch:
 
