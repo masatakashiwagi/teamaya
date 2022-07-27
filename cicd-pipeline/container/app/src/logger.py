@@ -1,6 +1,5 @@
 """Logger function.
 ログ出力のための関数．
-@ Connehito, Inc. All rights reserved.
 """
 
 import logging
