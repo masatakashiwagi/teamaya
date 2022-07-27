@@ -1,6 +1,6 @@
 {
-    "name": "tst-mkashiwagi-codepipeline",
-    "roleArn": "arn:aws:iam::322695298880:role/service-role/codepipeline-tst-mkashiwagi-service-role",
+    "name": "teamaya-codepipeline",
+    "roleArn": "arn:aws:iam::<AWSアカウントID>:role/service-role/codepipeline-service-role",
     "artifactStore": {
         "type": "S3",
         "location": "codepipeline-ap-northeast-1-712828065497"
@@ -20,8 +20,8 @@
                     "runOrder": 1,
                     "configuration": {
                         "BranchName": "dev",
-                        "ConnectionArn": "arn:aws:codestar-connections:ap-northeast-1:322695298880:connection/f65f5456-a403-4c33-81a9-6f2b452f0e3a",
-                        "FullRepositoryId": "masatakashiwagi/codepipeline",
+                        "ConnectionArn": "<Connection Arn>",
+                        "FullRepositoryId": "<リポジトリ名>",
                         "OutputArtifactFormat": "CODE_ZIP"
                     },
                     "outputArtifacts": [
@@ -47,7 +47,7 @@
                     },
                     "runOrder": 1,
                     "configuration": {
-                        "ProjectName": "tst-mkashiwagi-codebuild"
+                        "ProjectName": "teamaya-codebuild"
                     },
                     "outputArtifacts": [
                         {
@@ -77,7 +77,7 @@
                     },
                     "runOrder": 1,
                     "configuration": {
-                        "StateMachineArn": "arn:aws:states:ap-northeast-1:322695298880:stateMachine:dev-sample-ml-pipelines-ver1"
+                        "StateMachineArn": "arn:aws:states:ap-northeast-1:<AWSアカウントID>:stateMachine:dev-sample-ml-pipelines-ver1"
                     },
                     "outputArtifacts": [
                         {
