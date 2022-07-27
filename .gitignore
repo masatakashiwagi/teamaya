@@ -134,3 +134,4 @@ dmypy.json
 async-processing/app/data/
 async-processing/app/rabbitmq/data/
 logs/
+.aws-sam/

@@ -60,4 +60,4 @@ jobs:
           aws-region: ap-northeast-1
 
       - name: Update Codepipeline
-        run: aws codepipeline update-pipeline --pipeline file://config/codepipeline-ver1.json
+        run: aws codepipeline update-pipeline --pipeline file://cicd-pipeline/config/dev-codepipeline-ver1.json
