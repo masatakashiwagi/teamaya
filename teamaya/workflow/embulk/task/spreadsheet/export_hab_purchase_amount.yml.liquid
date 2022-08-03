@@ -4,7 +4,7 @@ in:
   json_keyfile: {{ env.GCP_SERVICE_JSON }}
   spreadsheets_url: {{ env.SPREADSHEETS_TABLE }}
   default_timezone: 'Asia/Tokyo'
-  worksheet_title: year_purchase_amount_2019
+  worksheet_title: {{ env.WORKSHEET_TITLE }}
   start_row: 2
   columns:
     - {name: id, type: long}
@@ -12,6 +12,7 @@ in:
     - {name: category, type: string}
     - {name: purchaser, type: string}
     - {name: purchase_amount, type: long}
+    - {name: shop_name, type: string}
     - {name: memo, type: string}
 
 out:
@@ -21,7 +22,7 @@ out:
   json_keyfile: {{ env.GCP_SERVICE_JSON }}
   project: {{ env.BIGQUERY_PROJECT }}
   dataset: {{ env.BIGQUERY_PURCHASE_AMOUNT_DATASET }}
-  table: daily_purchase_amount
+  table: {{ env.BIGQUERY_TABLE }}
   auto_create_table: true
   source_format: NEWLINE_DELIMITED_JSON
   default_timezone: 'Asia/Tokyo'
