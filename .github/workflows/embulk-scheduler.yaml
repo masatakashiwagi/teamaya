@@ -1,0 +1,31 @@
+name: embulk_scheduler
+on:
+  schedule:
+    # 定期実行する時間
+    # - cron: '0 10 * * 1'
+    - cron: '*/3 * * * *'
+
+jobs:
+  etl-executor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Run script
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          SPREADSHEETS_TABLE: ${{ secrets.SPREADSHEETS_TABLE }}
+          BIGQUERY_PROJECT: teamaya-8131
+          BIGQUERY_PURCHASE_AMOUNT_DATASET: purchase_amount_source_spreadsheets
+          BIGQUERY_TABLE: daily_purchase_amount_2022
+          WORKSHEET_TITLE: year_purchase_amount_2022
+        run: |
+          cd teamaya/workflow
+          docker compose up -d embulk
+          # production-run
+          docker exec embulk sh /bin/embulk run -b embulk/bundle embulk/task/spreadsheet/export_hab_purchase_amount.yml.liquid
+          echo "finish embulk schedule execution"
