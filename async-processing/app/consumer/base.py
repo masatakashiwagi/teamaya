@@ -104,7 +104,7 @@ class BaseConsumer:
         s3_file_path = s3_dir_path + file_name
         bucket.upload_file(file_path + file_name, s3_file_path)
 
-    @ staticmethod
+    @staticmethod
     def save_model(model: object, filename: str):
         """Save trained model
 
